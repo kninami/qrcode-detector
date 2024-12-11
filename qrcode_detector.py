@@ -1,4 +1,3 @@
-import cv2
 import requests
 import re
 from dotenv import load_dotenv
@@ -8,6 +7,7 @@ from PIL import Image
 from PIL.ExifTags import TAGS
 import qrcode
 from pyzbar.pyzbar import decode
+import pdf_generator
 
 load_dotenv()
 VIRUSTOTAL_API_KEY = os.getenv('VIRUSTOTAL_API_KEY')
@@ -205,7 +205,7 @@ def check_url_safety(url):
 
 # 메인 함수
 if __name__ == "__main__":
-    image_path = './scam_qr.png'
+    image_path = './naver_qr.png'
     
     # QR 코드 디코딩
     qr_data = process_qr_codes(image_path)
@@ -214,4 +214,7 @@ if __name__ == "__main__":
     # 이미지 정보 
     metadata = extract_metadata(image_path)
     print(metadata)
+    
+    # PDF 생성 
+    pdf_generator.create_pdf_with_image_and_text(image_path, qr_data, metadata)
     
