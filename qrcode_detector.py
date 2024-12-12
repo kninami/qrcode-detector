@@ -1,5 +1,6 @@
 import requests
 import re
+import sys
 from dotenv import load_dotenv
 import os
 from urllib.parse import urlparse, urljoin
@@ -220,13 +221,10 @@ def check_url_safety(url):
     finally:
         return safety_flag, analysis_results
 
-# 메인 함수
-if __name__ == "__main__":
-    image_path = './scam_qr.png'
-    
+# [EXECUTION]
+def main(image_path):
     # QR 코드 디코딩
     qr_data = process_qr_codes(image_path)
-    print(qr_data)
     
     # 이미지 정보 
     metadata = extract_metadata(image_path)
@@ -234,6 +232,15 @@ if __name__ == "__main__":
     
     # PDF 생성 
     pdf_generator.create_pdf_with_image_and_text(image_path, qr_data, metadata)
+    
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Usage: python qrcode_detector.py <image_path>")
+        sys.exit(1)  
+
+    image_path = sys.argv[1]
+    main(image_path)    
         
         
         
