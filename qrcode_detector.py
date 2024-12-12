@@ -8,10 +8,24 @@ from PIL.ExifTags import TAGS
 import qrcode
 from pyzbar.pyzbar import decode
 import pdf_generator
+from datetime import datetime
+import geocoder
 
 load_dotenv()
 VIRUSTOTAL_API_KEY = os.getenv('VIRUSTOTAL_API_KEY')
 
+def record_date_and_location():
+    """
+    QR코드를 검사하는 날짜와 위치(GPS) 정보 기록
+    """
+    current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    g = geocoder.ip('me')  # IP 기반 위치
+    if g.ok:
+        latitude, longitude = g.latlng
+        location = f"latitude {latitude}, longitude {longitude}"
+    return current_date, location
+    
 def analyze_qr_content(data):
     """QR 코드 내용을 분석하여 구조화된 정보를 반환"""
     result = {
@@ -150,19 +164,22 @@ def process_qr_codes(image_path):
     for obj in decoded_objects:
         data = obj.data.decode('utf-8')
         analysis = analyze_qr_content(data)
+        message = ""
+
+        #분석 날짜 및 장소 추가
+        time, location = record_date_and_location()
+        analysis['time'] = time
+        analysis['location'] = location
+        
+        # 분석 결과 추가
+        if analysis['is_suspicious']:
+            message = "⚠️ Warning: This QR code might be suspicious!"
+        else:
+            message = "This QR code is safe"        
+        analysis['message'] = message        
+        
         results.append(analysis)
         
-        # 분석 결과 출력
-        print(f"\nQR Code Analysis Results:")
-        print(f"Type: {analysis['type']}")
-        if analysis['subtype']:
-            print(f"Subtype: {analysis['subtype']}")
-        print(f"Metadata: {analysis['metadata']}")
-        if analysis['security_flags']:
-            print(f"Security Flags: {analysis['security_flags']}")
-        if analysis['is_suspicious']:
-            print("⚠️ Warning: This QR code might be suspicious!")
-            
     return results
 
 # URL의 도메인 정보 및 악성 여부 탐지 (VIRUSTOTAL)
@@ -205,7 +222,7 @@ def check_url_safety(url):
 
 # 메인 함수
 if __name__ == "__main__":
-    image_path = './naver_qr.png'
+    image_path = './scam_qr.png'
     
     # QR 코드 디코딩
     qr_data = process_qr_codes(image_path)
@@ -217,4 +234,6 @@ if __name__ == "__main__":
     
     # PDF 생성 
     pdf_generator.create_pdf_with_image_and_text(image_path, qr_data, metadata)
-    
+        
+        
+        
