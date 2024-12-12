@@ -1,3 +1,4 @@
+import os
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
@@ -7,7 +8,9 @@ BOLD_FONT = "Helvetica-Bold"
 PDF_TITLE = "Analysis Results for QR Code"
 
 def create_pdf_with_image_and_text(image_path, data, img_metadata, x=50, y=750, image_width=200, image_height=200):
-    output_path = "qrcode_results.pdf"
+    file_name_with_extension = os.path.basename(image_path)
+    file_name = os.path.splitext(file_name_with_extension)[0]
+    output_path = "qrcode_results" + "_" + file_name + ".pdf"
     try:
         c = canvas.Canvas(output_path, pagesize=letter)
         width, height = letter
