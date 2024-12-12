@@ -15,10 +15,8 @@ import geocoder
 load_dotenv()
 VIRUSTOTAL_API_KEY = os.getenv('VIRUSTOTAL_API_KEY')
 
+# QR코드 검사시점의 날짜와 위치 정보 기록
 def record_date_and_location():
-    """
-    QR코드를 검사하는 날짜와 위치(GPS) 정보 기록
-    """
     current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
     g = geocoder.ip('me')  # IP 기반 위치
@@ -26,9 +24,9 @@ def record_date_and_location():
         latitude, longitude = g.latlng
         location = f"latitude {latitude}, longitude {longitude}"
     return current_date, location
-    
+
+# QR코드 분석    
 def analyze_qr_content(data):
-    """QR 코드 내용을 분석하여 구조화된 정보를 반환"""
     result = {
         "raw_data": data,
         "type": "UNKNOWN",
