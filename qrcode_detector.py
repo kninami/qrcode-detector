@@ -223,17 +223,10 @@ def check_url_safety(url):
 
 # [EXECUTION]
 def main(image_path):
-    # QR 코드 디코딩
     qr_data = process_qr_codes(image_path)
-    
-    # 이미지 정보 
     metadata = extract_metadata(image_path)
-    print(metadata)
-    
-    # PDF 생성 
     pdf_generator.create_pdf_with_image_and_text(image_path, qr_data, metadata)
     
-
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: python qrcode_detector.py <image_path>")
