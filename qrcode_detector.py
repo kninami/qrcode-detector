@@ -210,7 +210,7 @@ def check_url_safety(url):
             if malicious_count == 0 and suspicious_count == 0:
                 safety_flag = True
             else:
-                safe
+                safety_flag = False
 
         else:
             print("VirusTotal API 호출 실패:", response.status_code)
