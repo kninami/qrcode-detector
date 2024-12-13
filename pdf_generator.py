@@ -25,7 +25,7 @@ def create_pdf_with_image_and_text(image_path, data, img_metadata, x=50, y=750, 
         width, height = letter
 
         c.setFont("Helvetica-Bold", 16)
-        c.drawString(50, height - 50, "PDF Title")
+        c.drawString(50, height - 50, "Analysis Results for QR Code")
 
         # 기본 글꼴 설정
         BASIC_FONT = "Helvetica"
