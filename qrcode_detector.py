@@ -40,12 +40,14 @@ def analyze_qr_content(data):
     if data.startswith(("http://", "https://")):
         result["type"] = "URL"
         result["subtype"] = "http" if data.startswith("http://") else "https"
+        action = "payment" if "pay" in data or "payment" in data else "redirect"
         result["metadata"] = {
             "domain": data.split("/")[2],
             "protocol": data.split("://")[0],
-            "path": "/".join(data.split("/")[3:])
+            "path": "/".join(data.split("/")[3:]),
+            "action": action
         }
-
+        
         # HTTP 사용시 보안 플래그 추가
         if data.startswith("http://"):
             result["security_flags"].append("INSECURE_PROTOCOL")
@@ -119,7 +121,7 @@ def analyze_qr_content(data):
         # 숫자와 문자가 섞인 특정 패턴 분석
         if "-" in data and any(c.isdigit() for c in data):
             parts = data.split("-")
-            if len(parts) >= 3:  # 일반적인 참조번호 형식
+            if len(parts) >= 3: 
                 result["type"] = "REFERENCE_NUMBER"
                 result["metadata"] = {
                     "prefix": parts[0],

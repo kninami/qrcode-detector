@@ -41,7 +41,7 @@ def create_pdf_with_image_and_text(image_path, data, img_metadata, x=50, y=750, 
                         if key == "message":
                             c.setFont(BOLD_FONT, 12)
                             c.setFillColor(colors.blue)
-                            y = draw_wrapped_text(c, str(value), x, y, max_width=80)  # 메시지 출력
+                            y = draw_wrapped_text(c, str(value), x, y, max_width=80) 
                             c.setFillColor(colors.black)  # 기본 색상으로 복원
                             c.setFont(BASIC_FONT, 12)  # 기본 폰트로 복원
                         elif key == "metadata" and isinstance(value, dict):
@@ -49,14 +49,14 @@ def create_pdf_with_image_and_text(image_path, data, img_metadata, x=50, y=750, 
                             y -= 15
                             for meta_key, meta_value in value.items():
                                 text_line = f"  {meta_key}: {meta_value}"  # 들여쓰기
-                                y = draw_wrapped_text(c, text_line, x + 10, y, max_width=80)  # 줄바꿈 출력
+                                y = draw_wrapped_text(c, text_line, x + 10, y, max_width=80)  
                             y -= 10  # metadata 블록 간 여백
                         else:
                             text_line = f"{key}: {value}"
-                            y = draw_wrapped_text(c, text_line, x, y, max_width=80)  # 일반 텍스트 줄바꿈 출력
+                            y = draw_wrapped_text(c, text_line, x, y, max_width=80) 
                     y -= 10  # 리스트 항목 간 여백
                 else:
-                    y = draw_wrapped_text(c, str(item), x, y, max_width=80)  # 리스트의 일반 항목 줄바꿈 출력
+                    y = draw_wrapped_text(c, str(item), x, y, max_width=80)  
                     y -= 15
 
         c.drawImage(image_path, x, y - image_height - 10, width=image_width, height=image_height)
