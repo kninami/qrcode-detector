@@ -151,7 +151,12 @@ def extract_metadata(image_path):
             # EXIF 데이터 (JPEG만 해당)
             exif_data = img._getexif()
             if exif_data:
-                metadata['EXIF'] = {TAGS.get(tag): value for tag, value in exif_data.items() if tag in TAGS}
+                readable_exif = {}
+                for tag_id, value in exif_data.items():
+                    tag_name = TAGS.get(tag_id, tag_id) 
+                    readable_exif[tag_name] = value                
+                for tag, val in readable_exif.items():
+                    print(f"{tag}: {val}")
     except Exception as e:
         print(f"Error extracting metadata: {e}")
     
